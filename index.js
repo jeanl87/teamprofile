@@ -4,7 +4,6 @@ const Manager = require("./lib/Manager");
 const inquirer = require("inquirer");
 const generateWebpage = require("./src/webpage");
 const fs = require("fs");
-const path = require("path");
 const teamMembers = [];
 
 function createManager() {
