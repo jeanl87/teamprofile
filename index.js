@@ -2,6 +2,10 @@ const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
 const inquirer = require("inquirer");
+const generateWebpage = require("./src/webpage");
+const fs = require("fs");
+const path = require("path");
+const teamMembers = [];
 
 function createManager() {
   inquirer
@@ -29,10 +33,36 @@ function createManager() {
     ])
     .then((responseObject) => {
       const manager = new Manager(responseObject.managerName);
+      teamMembers.push(manager);
+      promptMenu();
     });
 }
 
-function createEngineer() {
+const promptMenu = () => {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "menu",
+        message: "Please select an option to proceed:",
+        choices: ["add an engineer", "add an intern", "finish building team"],
+      },
+    ])
+    .then((userChoice) => {
+      switch (userChoice.menu) {
+        case "add an engineer":
+          promptEngineer();
+          break;
+        case "add an intern":
+          promptIntern();
+          break;
+        default:
+          buildTeam();
+      }
+    });
+};
+
+const promptEngineer = () => {
   inquirer
     .prompt([
       {
@@ -58,10 +88,12 @@ function createEngineer() {
     ])
     .then((responseObject) => {
       const engineer = new Engineer(responseObject.engineerName);
+      teamMembers.push(engineer);
+      promptMenu();
     });
-}
+};
 
-function createIntern() {
+const promptIntern = () => {
   inquirer
     .prompt([
       {
@@ -87,9 +119,11 @@ function createIntern() {
     ])
     .then((responseObject) => {
       const intern = new Intern(responseObject.Name);
+      teamMembers.push(intern);
+      promptMenu();
     });
-}
+};
+
+const buildTeam = () => {};
 
 createManager();
-// createEngineer();
-// createIntern();
